@@ -28,7 +28,7 @@ func main() {
 	}, router)
 
 	if err := router.Run(); err != nil {
-		slog.Error("Failed to start server", err)
+		slog.Error("Failed to start server", "details", err.Error())
 		os.Exit(1)
 	}
 }
