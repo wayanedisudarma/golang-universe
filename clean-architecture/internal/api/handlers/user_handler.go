@@ -20,19 +20,19 @@ func (userHandler *UserHandler) GetUser(context *gin.Context) {
 	context.JSON(http.StatusOK, gin.H{"user": "John Doe"})
 }
 
-func (userHandler *UserHandler) CreateUser(c *gin.Context) {
+func (userHandler *UserHandler) CreateUser(context *gin.Context) {
 	var req model.CreateUserRequest
 
-	if err := c.ShouldBindJSON(&req); err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+	if err := context.ShouldBindJSON(&req); err != nil {
+		context.JSON(http.StatusBadRequest, model.ResponseBadRequest(err.Error()))
 		return
 	}
 
 	user, err := userHandler.userService.Create(req)
 	if err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"error": "Could not create user"})
+		context.JSON(http.StatusBadRequest, model.ResponseBadRequest("Could not create user"))
 		return
 	}
 
-	c.JSON(http.StatusCreated, user)
+	context.JSON(http.StatusCreated, model.ResponseOkWithData(user))
 }
