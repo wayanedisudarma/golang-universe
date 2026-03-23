@@ -2,7 +2,7 @@ package config
 
 import (
 	"fmt"
-	"log"
+	"log/slog"
 
 	"github.com/spf13/viper"
 )
@@ -40,7 +40,7 @@ func NewConfig() (*Config, error) {
 	}
 
 	if err := viper.ReadInConfig(); err != nil {
-		log.Println("Config file not found, using env or defaults")
+		slog.Info("Config file not found, using env or defaults")
 	}
 
 	var cfg Config

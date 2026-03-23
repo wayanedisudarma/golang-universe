@@ -4,6 +4,7 @@ import (
 	"clean-architecture/internal/entity"
 	"clean-architecture/internal/model"
 	"clean-architecture/internal/repository"
+	"log/slog"
 
 	"golang.org/x/crypto/bcrypt"
 )
@@ -34,5 +35,7 @@ func (userService *userServiceImpl) Create(req model.CreateUserRequest) (*entity
 	if err := userService.userRepository.Create(user); err != nil {
 		return nil, err
 	}
+
+	slog.Info("User created", "email", user.Email)
 	return user, nil
 }

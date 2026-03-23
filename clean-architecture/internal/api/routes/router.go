@@ -10,10 +10,6 @@ type RouterConfig struct {
 	UserHandler *handlers.UserHandler
 }
 
-func NewRouter(config RouterConfig) *gin.Engine {
-	router := gin.Default()
-
+func NewRouter(config RouterConfig, router *gin.Engine) {
 	MapUserRoutes(router.Group("/api/v1/user"), config.UserHandler)
-
-	return router
 }

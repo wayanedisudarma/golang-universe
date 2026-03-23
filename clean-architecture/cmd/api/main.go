@@ -6,21 +6,29 @@ import (
 	"clean-architecture/internal/config"
 	"clean-architecture/internal/repository"
 	"clean-architecture/internal/services"
-	"log"
+	"log/slog"
+	"os"
+
+	"github.com/gin-gonic/gin"
 )
 
 func main() {
-
+	gin.SetMode(gin.ReleaseMode)
+	router := gin.New()
+	router.Use(gin.Recovery())
+	router.Use(config.JSONLogger())
+	config.InitLogger()
 	appConfig, _ := config.NewConfig()
 	db := config.NewDatabase(appConfig)
 	userRepository := repository.NewUserRepository(db)
 	userService := services.NewUserService(userRepository)
 	userHandler := handlers.NewUserHandler(userService)
-	router := routes.NewRouter(routes.RouterConfig{
+	routes.NewRouter(routes.RouterConfig{
 		UserHandler: userHandler,
-	})
+	}, router)
 
 	if err := router.Run(); err != nil {
-		log.Fatalf("Failed to start server: %v", err)
+		slog.Error("Failed to start server", err)
+		os.Exit(1)
 	}
 }
