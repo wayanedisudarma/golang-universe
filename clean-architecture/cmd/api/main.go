@@ -11,7 +11,8 @@ import (
 
 func main() {
 
-	db := config.NewDatabase()
+	appConfig, _ := config.NewConfig()
+	db := config.NewDatabase(appConfig)
 	userRepository := repository.NewUserRepository(db)
 	userService := services.NewUserService(userRepository)
 	userHandler := handlers.NewUserHandler(userService)
