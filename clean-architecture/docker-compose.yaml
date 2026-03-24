@@ -1,0 +1,31 @@
+version: '3.8'
+
+services:
+  db-postgres:
+    image: postgres:15-alpine
+    container_name: postgres_db
+    environment:
+      POSTGRES_USER: user_admin
+      POSTGRES_PASSWORD: password_rahasia
+      POSTGRES_DB: clean-architecture
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+  clean-architecture-service:
+    image: clean-architecture-service:v.1.0.0
+    container_name: clean-architecture-service
+    depends_on:
+      - db-postgres
+    ports:
+      - "8080:8080"
+    environment:
+      - POSTGRES_HOST=db-postgres
+      - POSTGRES_PORT=5432
+      - POSTGRES_USERNAME=user_admin
+      - POSTGRES_PASSWORD=password_rahasia
+      - POSTGRES_DBNAME=clean-architecture
+
+volumes:
+  postgres_data:
