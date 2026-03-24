@@ -7,6 +7,6 @@ import (
 )
 
 func MapUserRoutes(group *gin.RouterGroup, userHandler *handlers.UserHandler) {
-	group.GET("/", userHandler.GetUser)
+	group.GET("/:userId", userHandler.GetUser)
 	group.POST("/", userHandler.CreateUser)
 }

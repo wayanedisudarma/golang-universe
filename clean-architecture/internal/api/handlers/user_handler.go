@@ -6,6 +6,7 @@ import (
 	"net/http"
 
 	"github.com/gin-gonic/gin"
+	"github.com/google/uuid"
 )
 
 type UserHandler struct {
@@ -17,7 +18,19 @@ func NewUserHandler(userService services.UserService) *UserHandler {
 }
 
 func (userHandler *UserHandler) GetUser(context *gin.Context) {
-	context.JSON(http.StatusOK, gin.H{"user": "John Doe"})
+	userId := context.Param("userId")
+
+	if _, err := uuid.Parse(userId); err != nil {
+		context.JSON(http.StatusBadRequest, model.ResponseBadRequest("Invalid user id"))
+		return
+	}
+
+	getUserResponse, err := userHandler.userService.GetUser(userId, context.Request.Context())
+	if err != nil {
+		context.JSON(http.StatusBadRequest, model.ResponseBadRequest(err.Error()))
+		return
+	}
+	context.JSON(http.StatusOK, model.ResponseOkWithData(getUserResponse))
 }
 
 func (userHandler *UserHandler) CreateUser(context *gin.Context) {
@@ -30,7 +43,7 @@ func (userHandler *UserHandler) CreateUser(context *gin.Context) {
 
 	user, err := userHandler.userService.Create(req)
 	if err != nil {
-		context.JSON(http.StatusBadRequest, model.ResponseBadRequest("Could not create user"))
+		context.JSON(http.StatusBadRequest, model.ResponseBadRequest(err.Error()))
 		return
 	}
 
