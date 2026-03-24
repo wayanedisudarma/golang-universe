@@ -13,11 +13,20 @@ services:
     volumes:
       - postgres_data:/var/lib/postgresql/data
 
+  migrate:
+    image: migrate/migrate
+    volumes:
+      - ./db/migrations:/migrations
+    command: -path=/migrations/ -database "postgres://user_admin:password_rahasia@db-postgres:5432/clean-architecture?sslmode=disable" up
+    depends_on:
+      - db-postgres
+
   clean-architecture-service:
     image: clean-architecture-service:v.1.0.0
     container_name: clean-architecture-service
     depends_on:
-      - db-postgres
+      migrate:
+        condition: service_completed_successfully
     ports:
       - "8080:8080"
     environment:
