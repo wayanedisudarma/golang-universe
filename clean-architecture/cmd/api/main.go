@@ -4,6 +4,8 @@ import (
 	handlers "clean-architecture/internal/api/handlers"
 	routes "clean-architecture/internal/api/routes"
 	"clean-architecture/internal/config"
+	"clean-architecture/internal/i18n"
+	"clean-architecture/internal/middleware"
 	"clean-architecture/internal/repository"
 	"clean-architecture/internal/services"
 	"log/slog"
@@ -14,7 +16,9 @@ import (
 
 func main() {
 	gin.SetMode(gin.ReleaseMode)
+	i18n.Init()
 	router := gin.New()
+	router.Use(middleware.Middleware())
 	router.Use(gin.Recovery())
 	router.Use(config.JSONLogger())
 	config.InitLogger()

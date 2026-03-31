@@ -1,0 +1,6 @@
+{
+  "tittle.DEFAULT": "your request cannot be processed",
+  "description.DEFAULT": "your request cannot be processed, please contact the customer service",
+  "title.USER_NOT_FOUND": "User not found",
+  "description.USER_NOT_FOUND": "User not found, please check the user id"
+}

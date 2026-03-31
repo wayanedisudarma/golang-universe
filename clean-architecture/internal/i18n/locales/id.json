@@ -1,0 +1,6 @@
+{
+  "title.DEFAULT": "permintaan tidak dapat diproses",
+  "description.DEFAULT": "permintaan tidak dapat diproses, silahkan hubungi customer service",
+  "title.USER_NOT_FOUND": "User tidak ditemukan",
+  "description.USER_NOT_FOUND": "User tidak ditemukan, silahkan cek kembali id user"
+}
